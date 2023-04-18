@@ -130,12 +130,10 @@
                                         No
                                         </label>
                                     </div>
-
                                 </div>
-                            
-                            <!--  -->
+
                                 <div class="form-group d-none d-flex gap-2 " >
-                                    <div class="row mb-3" id="feedback_yes" name="feedback_yes">
+                                    <div class="row mb-3" id="feedback_no" name="feedback_no">
                                         <label for="year" class="col-form-label">{{ __('Year:*') }}</label>
                                         <div class="col-md-6 w-100">
                                             <input id="year" type="number" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ old('year') }}" autocomplete="year">
@@ -147,7 +145,7 @@
                                         </div>
                                     </div>
                                 
-                                    <div class="row mb-3 " id="feedback_yes" name="feedback_yes">
+                                    <div class="row mb-3 " id="feedback_no" name="feedback_no">
                                         <label for="month" class="col-form-label">{{ __('Month:*') }}</label>
                                         <div class="col-md-6 w-100">
                                             <input id="month" type="number" class="form-control @error('month') is-invalid @enderror" name="month" value="{{ old('month') }}" autocomplete="month"  min="1" max="12">
@@ -158,7 +156,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="row mb-3" id="feedback_yes" name="feedback_yes">
+                                    <div class="row mb-3" id="feedback_no" name="feedback_no">
                                         <label for="day" class="col-form-label">{{ __('Day:*') }}</label>
                                         <div class="col-md-6 w-100">
                                             <input type="number" id="day" class="form-control @error('day') is-invalid @enderror" name="day" value="{{ old('day') }}" autocomplete="day"  min="1" max="31"/>
@@ -172,7 +170,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group d-none w-50">
-                                    <div class="row mb-3" id="feedback_no" name="feedback_no">
+                                    <div class="row mb-3" id="feedback_yes" name="feedback_yes">
                                         <label for="event_trigger_date" class="col-form-label">{{ __('Event Date:') }}</label>
                                         <div class="col-md-6 w-100">
                                             <input id="datepicker" type="text" class="form-control @error('event_trigger_date') is-invalid @enderror w-100" name="event_trigger_date" value="{{old('event_trigger_date')}}" autocomplete="event_trigger_date">
@@ -250,14 +248,15 @@
             if (value == 'Yes' ){
                 is_value = true;
                 yes.removeClass('d-none'); //show feedback_yes	
-                document.getElementById("datepicker").value='';
+
+                document.getElementById("year").value='';
+                document.getElementById("month").value='';
+                document.getElementById("day").value='';
             }
             else if (value == 'No'){
                 is_value = false;
                 no.removeClass('d-none'); //show feedback_no	
-                document.getElementById("year").value='';
-                document.getElementById("month").value='';
-                document.getElementById("day").value='';
+                document.getElementById("datepicker").value='';
             }		
             console.log(is_value);
         });	
@@ -276,6 +275,6 @@
 
 
 </body>
- 
+
 </html>
 @endsection

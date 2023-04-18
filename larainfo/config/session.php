@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 
 return [
 
+
     /*
     |--------------------------------------------------------------------------
     | Default Session Driver
@@ -60,6 +61,7 @@ return [
     */
 
     'files' => storage_path('framework/sessions'),
+
 
     /*
     |--------------------------------------------------------------------------

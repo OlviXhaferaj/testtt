@@ -8,11 +8,11 @@
     <meta charset="UTF-8">
     <title>View all events</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-    <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
     <link rel="stylesheet" href="//cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.css"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
 </head>
 
 <body>
@@ -23,7 +23,7 @@
                     <h2>All Events</h2>
                 </div>
                 <div class="pull-right mb-2">
-                    <a class="btn btn-success" href="{{ route('users.create') }}">Create Event</a>
+                    <a class="btn btn-success" href="{{ route('events.create') }}">Create Event</a>
                 </div>
             </div>
         </div>
@@ -54,50 +54,49 @@
         </div>
     </div>
 
-
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
-    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script src="//cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.js"></script>
-
     <script type="text/javascript">
 
-$(function () {
+        $(function () {
 
-    var table = $('.yajra-datatable').DataTable({
-        responsive: true,
-        paging: true,
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('events.index') }}",
-        columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'eventType', name: 'eventType'},
-            {data: 'epoce', name: 'epoce'},
-            {data: 'year', name: 'year'},
-            {data: 'month', name: 'month'},
-            {data: 'day', name: 'day'},
-            {data: 'event_trigger_date', name: 'Event Date'},
-            {data: 'image', name: 'image', 
-                render: function( data, type, full, meta ) {
-                    return "<img src=\"/images/" + data + "\" height=\"100%\" width=\"100%\"  alt='Image'/>";
-                }},
+            var table = $('.yajra-datatable').DataTable({
+                responsive: true,
+                paging: true,
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('events.index') }}",
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'name', name: 'name'},
+                    {data: 'eventType', name: 'eventType'},
+                    {data: 'epoce', name: 'epoce'},
+                    {data: 'year', name: 'year'},
+                    {data: 'month', name: 'month'},
+                    {data: 'day', name: 'day'},
+                    {data: 'event_trigger_date', name: 'Event Date'},
+                    {data: 'image', name: 'image', 
+                        render: function( data, type, full, meta ) {
+                            return "<img src=\"/images/" + data + "\" height=\"100%\" width=\"100%\"  alt='Image'/>";
+                        }},
 
-            {data: 'description', name: 'description'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true
-            },
-        ]
-    });
-});
-</script>
+                    {data: 'description', name: 'description'},
+                    // {data: 'user_id', name: 'user_id'},
+
+                    {
+                        data: 'action', 
+                        name: 'action', 
+                        orderable: true, 
+                        searchable: true
+                    },
+                ],
+                rawColumns:['description']
+            });
+        });
+    </script>
     
 </body>
 

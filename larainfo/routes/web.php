@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\Auth\LoginController;
+
 
 
 /*
@@ -18,21 +20,53 @@ use App\Http\Controllers\EventsController;
 |
 */
 
-// The route for the users
 
+// Route::post('web/login', [LoginController::class, 'login']);
 
-
-    
 Route::get('/', function () {
     return view('welcome');
 });
-// Route::get('students', [UsersController::class, 'index']);
-// Route::get('students/list', [UsersController::class, 'getUsers'])->name('users.list');
 
-Route::resource('events', EventsController::class)
-->middleware(Auth::routes());
-Route::resource('users', UsersController::class)
-->middleware(Auth::routes());
+// Route to get the csrf token
+Route::get('/sanctum/csrf-cookie', function (Request $request) {
+    return response()->json([
+        'csrf_token' => csrf_token(),
+    ]);
+});
+
+// Route to get the path of the images from laravel
+Route::get('/images/{filename}', function ($filename) {
+    // this is the path to public folder 
+    // filename is the image name
+    $path = public_path('images/'.$filename);
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    // getting the file from path
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    // the response to give the image with status code 200
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+})->where('filename', '.*');
+
+
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::resource('users', UsersController::class);
+});
+Route::middleware('auth')->group(function () {
+    // Route::prefix('api')->group(function () {
+    // });
+});
+Route::resource('events', EventsController::class)->middleware('auth:sanctum');
+
+
+
+
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')
 ;
@@ -40,8 +74,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('events', EventsController::class);
-Route::resource('users', UsersController::class);
 Route::get('/connection', function() {
     try{
         DB::connection()->getPdo();

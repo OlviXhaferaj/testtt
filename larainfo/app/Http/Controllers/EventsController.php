@@ -9,19 +9,22 @@ use App\Models\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File; 
 
+use Illuminate\Support\Facades\DB; // Import the DB facade
+
+
 use Auth;
 
 class EventsController extends Controller
 {
-        /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    //     /**
+    //  * Create a new controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +33,7 @@ class EventsController extends Controller
     public function index(Request $request)
     {
         // the code to work on later
-        if($request->ajax()){
+        if($request->wantsJson()){
             $event = Event::latest()->get();
             return datatables()->of($event)
                     ->addIndexColumn()
@@ -50,8 +53,11 @@ class EventsController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
             }
-        return view('events.index');
-    }
+            $data = DB::table('events')->get();
+            // // or
+            $data = Event::all();
+            return view('events.index', compact('data'));
+        }
     /**
      * Show the form for creating a new resource.
      *
@@ -77,10 +83,15 @@ class EventsController extends Controller
             'description' => 'required',
             'image' => 'required',
             'eventType' => 'required',
-            'day' => 'required_without:event_trigger_date',
-            'month' => 'required_without:event_trigger_date',
-            'year' => 'required_without:event_trigger_date',
-            'event_trigger_date' => 'required_without:year,month,day',
+
+            // if event_trigger_date has no data then one of this fields should be required
+            // if day is filled, month, day, eventtrigger shouldnt be required
+            'day' => 'required_with:month|required_without_all:event_trigger_date,year,',
+            'month' => 'required_with:day|required_without_all:event_trigger_date,day,year,',
+            'year' => 'required_without_all:event_trigger_date,month,day,',
+
+            // If none of the fields above are filled, than event_trigger_date should be required 
+            'event_trigger_date' => 'required_without_all:year,month,day'
         ]); 
         if($request->hasfile('image'))
         {
@@ -95,6 +106,7 @@ class EventsController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'image' =>$file_name,
+                'epoce' =>$request->epoce,
                 'eventType' => $request->eventType,
                 'day' => $request->day,
                 'month' => $request->month,
@@ -102,6 +114,9 @@ class EventsController extends Controller
                 'event_trigger_date' => $request->event_trigger_date,
                 'user_id' => $user_id
             ]); 
+        }else {
+            // If no image file was uploaded, return an error message
+            return redirect()->back()->withErrors(['image' => 'The image field is required.']);
         }
 
         return redirect()->route('events.index')->with('success','The Event has been created.');
@@ -147,13 +162,17 @@ class EventsController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
-            // 'image' => 'required',
+            'image' => 'required',
             'eventType' => 'required',
-            // if event_trigger_date has no data then day month and year is required
-            'day' => 'required_without:event_trigger_date',
-            'month' => 'required_without:event_trigger_date',
-            'year' => 'required_without:event_trigger_date',
-            'event_trigger_date' => 'required_without:year,month,day'
+
+            // if event_trigger_date has no data then one of this fields should be required
+            // if day is filled, month, day, eventtrigger shouldnt be required
+            'day' => 'required_with:month|required_without_all:event_trigger_date,year,',
+            'month' => 'required_with:day|required_without_all:event_trigger_date,day,year,',
+            'year' => 'required_without_all:event_trigger_date,month,day,',
+
+            // If none of the fields above are filled, than event_trigger_date should be required 
+            'event_trigger_date' => 'required_without_all:year,month,day'
         ]);
         if($request->hasfile('image'))
         {

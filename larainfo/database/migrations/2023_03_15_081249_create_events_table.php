@@ -17,7 +17,6 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            // $table->unsignedInteger('user_id');
             $table->string('image');
             $table->enum('eventType', ['Death','Birth','Other'])->default('Birth');
             $table->integer('day')->nullable();

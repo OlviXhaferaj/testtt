@@ -136,6 +136,9 @@ return [
 
     'providers' => [
 
+        // Enablig cors 
+        Fruitcake\Cors\CorsServiceProvider::class,
+
         // Yajra datatables download
         Yajra\DataTables\DataTablesServiceProvider::class,
         /*

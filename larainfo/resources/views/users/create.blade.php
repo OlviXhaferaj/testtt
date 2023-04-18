@@ -8,7 +8,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Company Form - Laravel 9 CRUD</title>
- 
 
 </head>
 

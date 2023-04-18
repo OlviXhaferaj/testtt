@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
-            /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    //         /**
+    //  * Create a new controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +27,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         // $list_user = User::all();
-        if($request->ajax()){
+        if($request->wantsJson()){
             $user = User::latest()->get();
             return datatables()->of($user)
                     ->addIndexColumn()
